@@ -1,10 +1,12 @@
 import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
+    alias(libs.plugins.buildKonfig)
 }
 
 kotlin {
@@ -83,6 +85,15 @@ android {
     }
     dependencies {
         debugImplementation(libs.compose.ui.tooling)
+    }
+}
+
+buildkonfig {
+    packageName = "com.tokoonline.app"
+
+    // default config is required
+    defaultConfigs {
+        buildConfigField(STRING, "BASE_URL", "https://marketfake.fly.dev/")
     }
 }
 
