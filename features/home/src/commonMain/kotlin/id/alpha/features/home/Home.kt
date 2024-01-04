@@ -29,7 +29,9 @@ import id.alpha.libraries.core.LocalAppConfig
 import id.alpha.libraries.core.state.Async
 
 @Composable
-fun Home() {
+fun Home(
+    onClickItem: (ProductList) -> Unit
+) {
     val appConfig = LocalAppConfig.current
     val productRepository = remember { ProductRepository(appConfig) }
     val homeViewModel = rememberViewModel { HomeViewModel(productRepository) }
@@ -79,13 +81,14 @@ fun Home() {
                 is Async.Success -> {
                     items(productList.data) {
                         ProductListItem(it) { product ->
-                            homeViewModel.sendIntent(
+                           /* homeViewModel.sendIntent(
                                 HomeIntent.ShowSnackbar(
                                     name = product.name,
                                     snackbarState = scaffoldState.snackbarHostState,
                                     coroutineScope = scope
                                 )
-                            )
+                            ) */
+                            onClickItem.invoke(product)
                         }
                     }
                 }

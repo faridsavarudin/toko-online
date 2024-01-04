@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.buildKonfig)
+    alias(libs.plugins.kotlinSerialization)
 }
 
 kotlin {
@@ -41,6 +42,9 @@ kotlin {
             implementation(projects.apis.product)
             implementation(projects.features.home)
             implementation(projects.libraries.core)
+            implementation(projects.features.productdetail)
+
+            implementation(libs.preCompose)
         }
 
         androidMain.dependencies {
