@@ -1,4 +1,4 @@
-package id.alpha.apis.product.model
+package id.alpha.apis.product.model.productlist
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

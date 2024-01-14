@@ -1,11 +1,11 @@
-package id.alpha.features.home
+package id.alpha.features.home.state
 
 import androidx.compose.material.SnackbarHostState
 import id.alpha.libraries.core.state.Intent
 import kotlinx.coroutines.CoroutineScope
 
 sealed class HomeIntent : Intent {
-    data class SetName(val name: String) : HomeIntent()
-    data object GetProductList : HomeIntent()
+    data object GetCategoryList : HomeIntent()
+    data object GetProductsByRating : HomeIntent()
     data class ShowSnackbar(val name: String, val snackbarState: SnackbarHostState, val coroutineScope: CoroutineScope) : HomeIntent()
 }

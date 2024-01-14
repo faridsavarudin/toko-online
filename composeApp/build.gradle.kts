@@ -98,6 +98,7 @@ buildkonfig {
     // default config is required
     defaultConfigs {
         buildConfigField(STRING, "BASE_URL", "https://marketfake.fly.dev/")
+        buildConfigField(STRING, "APP_NAME", "Toko Online")
     }
 }
 

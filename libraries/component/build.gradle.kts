@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.jetbrainsCompose)
+
 }
 
 kotlin {
@@ -19,7 +20,7 @@ kotlin {
         iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "home"
+            baseName = "component"
             isStatic = true
         }
     }
@@ -34,16 +35,13 @@ kotlin {
             implementation(compose.components.resources)
 
             implementation(projects.libraries.core)
-            implementation(projects.libraries.component)
             implementation(projects.apis.product)
             //put your multiplatform dependencies here
         }
-
         androidMain.dependencies {
             implementation(libs.compose.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
         }
-
         commonTest.dependencies {
             implementation(libs.kotlin.test)
         }
@@ -51,7 +49,7 @@ kotlin {
 }
 
 android {
-    namespace = "id.alpha.features.home"
+    namespace = "id.alpha.libraries.component"
     compileSdk = 34
     defaultConfig {
         minSdk = 24
