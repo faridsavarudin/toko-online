@@ -17,12 +17,12 @@ fun App() {
     val viewModelHost = remember { ViewModelHost() }
     val appConfigProvider = remember { AppConfigProvider() }
 
-    PreComposeApp {
-        CompositionLocalProvider(
-            LocalViewModelHost provides viewModelHost,
-            LocalAppConfig provides appConfigProvider
-        ) {
-            MaterialTheme {
+    CompositionLocalProvider(
+        LocalViewModelHost provides viewModelHost,
+        LocalAppConfig provides appConfigProvider
+    ) {
+        MaterialTheme {
+            PreComposeApp {
                 val navigator = rememberNavigator()
                 NavHost(
                     navigator = navigator,
@@ -36,12 +36,11 @@ fun App() {
                             navigator.navigate("/detail/${it.name}")
                         }
                     }
-
                     scene(
                         route = "/detail/{name}"
                     ) {
-                        val name = it.pathMap["name"].orEmpty()
-                        ProductDetail(name)
+                        val productId = it.pathMap["id"].orEmpty().toIntOrNull() ?: 0
+                        ProductDetail(productId)
                     }
                 }
             }

@@ -41,38 +41,15 @@ fun Home(
 
     val scaffoldState = rememberScaffoldState()
 
-    val scope = rememberCoroutineScope()
-
-    LaunchedEffect(Unit) {
-        homeViewModel.sendIntent(
-            HomeIntent.GetCategoryList
-        )
-        homeViewModel.sendIntent(
-            HomeIntent.GetProductsByRating
-        )
-    }
-
     Scaffold(
         scaffoldState = scaffoldState
     ) {
         Column {
             HeaderSection(homeState)
             CategorySection(homeState)
-            ProductByRatingSection(homeState)
+            ProductByRatingSection(homeState) {
+                onClickItem.invoke(it)
+            }
         }
-    }
-}
-
-@Composable
-fun ProductListItem(productList: ProductList, onClickItem: (ProductList) -> Unit) {
-
-    Column(
-        modifier = Modifier.clickable {
-            onClickItem.invoke(productList)
-        }
-    ) {
-        Text(
-            text = productList.name
-        )
     }
 }

@@ -36,6 +36,7 @@ kotlin {
 
             implementation(projects.libraries.core)
             implementation(projects.apis.product)
+            implementation(libs.imageLoader)
             //put your multiplatform dependencies here
         }
         androidMain.dependencies {

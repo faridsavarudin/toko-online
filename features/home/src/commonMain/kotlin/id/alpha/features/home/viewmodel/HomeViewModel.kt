@@ -18,6 +18,14 @@ class HomeViewModel(private val productRepository: ProductRepository) :
                 appName = productRepository.getAppName()
             )
         }
+
+        sendIntent(
+            HomeIntent.GetCategoryList
+        )
+
+        sendIntent(
+            HomeIntent.GetProductsByRating
+        )
     }
 
     override fun sendIntent(intent: Intent) {

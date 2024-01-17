@@ -4,9 +4,9 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 
 @Composable
-fun ProductDetail (name: String) {
+fun ProductDetail (id: Int) {
 
     Text(
-        text = name
+        text = id.toString()
     )
 }
