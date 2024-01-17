@@ -1,5 +1,6 @@
 package id.alpha.apis.product
 
+import androidx.compose.runtime.compositionLocalOf
 import id.alpha.apis.product.model.Mapper
 import id.alpha.apis.product.model.ProductList
 import id.alpha.apis.product.model.category.CategoryItem
@@ -47,6 +48,6 @@ class ProductRepository(private val appConfig: AppConfig) : Repository() {
             }
         }
     }
-
-
 }
+
+val LocalProductRepository = compositionLocalOf<ProductRepository> { error("Product repository not provided!") }

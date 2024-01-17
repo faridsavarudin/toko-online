@@ -22,6 +22,8 @@ ktor = "2.3.7"
 buildKonfig = "0.15.1"
 preCompose = "1.5.9"
 imageLoader = "1.7.1"
+paging-androidx = "3.3.0-alpha02"
+paging-cashapp = "3.3.0-alpha02-0.4.0"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -51,6 +53,10 @@ ktor-client-serialization = { module = "io.ktor:ktor-serialization-kotlinx-json"
 ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
 preCompose = { module = "moe.tlaster:precompose", version.ref = "preCompose" }
 imageLoader = { module = "io.github.qdsfdhvh:image-loader", version.ref = "imageLoader" }
+paging-androidx-runtime = { module = "androidx.paging:paging-runtime", version.ref = "paging-androidx" }
+paging-androidx-compose = { module = "androidx.paging:paging-compose", version.ref = "paging-androidx" }
+paging-cashapp-common = { module = "app.cash.paging:paging-common", version.ref = "paging-cashapp" }
+paging-cashapp-compose = { module = "app.cash.paging:paging-compose-common", version.ref = "paging-cashapp" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

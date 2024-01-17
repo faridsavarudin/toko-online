@@ -15,7 +15,7 @@ object Mapper {
             }.orEmpty()
     }
 
-    private fun mapItemResponseToItemList(itemResponse: ProductListResponse.DataResponse?): ProductItem {
+    fun mapItemResponseToItemList(itemResponse: ProductListResponse.DataResponse?): ProductItem {
         return ProductItem(
             id = itemResponse?.id ?: 0,
             name = itemResponse?.name.orEmpty(),

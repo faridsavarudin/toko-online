@@ -1,40 +1,28 @@
 package id.alpha.features.home
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Text
 import androidx.compose.material.rememberScaffoldState
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
-import id.alpha.apis.product.ProductRepository
-import id.alpha.apis.product.model.ProductList
+import id.alpha.apis.product.model.category.CategoryItem
 import id.alpha.apis.product.model.productlist.ProductItem
 import id.alpha.features.home.screen.CategorySection
 import id.alpha.features.home.screen.HeaderSection
 import id.alpha.features.home.screen.ProductByRatingSection
-import id.alpha.features.home.state.HomeIntent
 import id.alpha.features.home.viewmodel.HomeViewModel
-import id.alpha.libraries.core.LocalAppConfig
 import id.alpha.libraries.core.viewmodel.rememberViewModel
-import id.alpha.libraries.core.state.Async
+import id.alpha.apis.product.LocalProductRepository
+import id.alpha.features.home.state.HomeIntent
+
 
 @Composable
 fun Home(
-    onClickItem: (ProductItem) -> Unit
+    onClickItem: (ProductItem) -> Unit,
+    onCategoryClick: (CategoryItem) -> Unit
 ) {
-    val appConfig = LocalAppConfig.current
-    val productRepository = remember { ProductRepository(appConfig) }
+    val productRepository = LocalProductRepository.current
     val homeViewModel = rememberViewModel { HomeViewModel(productRepository) }
 
     val homeState by homeViewModel.uiState.collectAsState()
@@ -46,10 +34,23 @@ fun Home(
     ) {
         Column {
             HeaderSection(homeState)
-            CategorySection(homeState)
-            ProductByRatingSection(homeState) {
-                onClickItem.invoke(it)
-            }
+            CategorySection(
+                homeState = homeState,
+                tryAgainAction = {
+                    homeViewModel.sendIntent(HomeIntent.GetCategoryList)
+                },
+                onCategoryClick = onCategoryClick
+            )
+            ProductByRatingSection(
+                homeState = homeState,
+                onItemClick = {
+
+                },
+                tryAgainAction = {
+                    homeViewModel.sendIntent(HomeIntent.GetProductsByRating)
+
+                }
+            )
         }
     }
 }
