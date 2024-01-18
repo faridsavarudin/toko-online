@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -18,6 +19,7 @@ import androidx.paging.LoadState
 import app.cash.paging.compose.collectAsLazyPagingItems
 import id.alpha.apis.product.LocalProductRepository
 import id.alpha.apis.product.model.productlist.ProductItem
+import id.alpha.libraries.component.AppTopBar
 import id.alpha.libraries.component.FailureScreen
 import id.alpha.libraries.component.LoadingScreen
 import id.alpha.libraries.component.product.ProductItemGridScreen
@@ -27,7 +29,7 @@ import id.alpha.libraries.core.viewmodel.rememberViewModel
 
 
 @Composable
-fun ProductList(categoryName: String, categoryId: Int) {
+fun ProductList(categoryName: String, categoryId: Int, actionBack: () -> Unit) {
 
     val productRepository = LocalProductRepository.current
     val appConfig = LocalAppConfig.current
@@ -41,46 +43,57 @@ fun ProductList(categoryName: String, categoryId: Int) {
         viewModel.sendIntent(ProductListIntent.SetCategoryName(categoryName))
     }
 
-    LazyColumn {
-        items(pagingProduct.itemCount) { index ->
-            val item = pagingProduct[index]
-            if (item != null) {
-                ProductItemGridScreen(
-                    productItem = item,
-                    onItemClick = {
-
-                    }
-                )
-            }
+    Scaffold(
+        topBar = {
+            AppTopBar(
+                title = state.categoryName,
+                actionBack = {
+                    actionBack.invoke()
+                }
+            )
         }
+    ) {
+        LazyColumn {
+            items(pagingProduct.itemCount) { index ->
+                val item = pagingProduct[index]
+                if (item != null) {
+                    ProductItemVerticalScreen(
+                        productItem = item,
+                        onItemClick = {
 
-        when {
-            pagingProduct.loadState.refresh is LoadState.Loading -> {
-                item {
-                    LoadingScreen()
+                        }
+                    )
                 }
             }
 
-            pagingProduct.loadState.append is LoadState.Loading -> {
-                item {
-                    LoadingScreen()
+            when {
+                pagingProduct.loadState.refresh is LoadState.Loading -> {
+                    item {
+                        LoadingScreen()
+                    }
                 }
-            }
 
-            pagingProduct.loadState.refresh is LoadState.Error -> {
-                item {
-                    val throwable = (pagingProduct.loadState.refresh as LoadState.Error).error
-                    FailureScreen(throwable.message.orEmpty())
+                pagingProduct.loadState.append is LoadState.Loading -> {
+                    item {
+                        LoadingScreen()
+                    }
                 }
-            }
 
-            pagingProduct.loadState.append is LoadState.Error -> {
-                item {
-                    val throwable = (pagingProduct.loadState.append as LoadState.Error).error
-                    FailureScreen(throwable.message.orEmpty())
+                pagingProduct.loadState.refresh is LoadState.Error -> {
+                    item {
+                        val throwable = (pagingProduct.loadState.refresh as LoadState.Error).error
+                        FailureScreen(throwable.message.orEmpty())
+                    }
                 }
-            }
 
+                pagingProduct.loadState.append is LoadState.Error -> {
+                    item {
+                        val throwable = (pagingProduct.loadState.append as LoadState.Error).error
+                        FailureScreen(throwable.message.orEmpty())
+                    }
+                }
+
+            }
         }
     }
 }

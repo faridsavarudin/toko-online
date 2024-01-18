@@ -8,6 +8,7 @@ import id.alpha.apis.product.model.category.CategoryItem
 import id.alpha.features.home.Home
 import id.alpha.features.productdetail.ProductDetail
 import id.alpha.features.productlist.ProductList
+import id.alpha.libraries.component.LocalImageResource
 import id.alpha.libraries.component.utils.toData
 import id.alpha.libraries.component.utils.toJson
 import id.alpha.libraries.core.LocalAppConfig
@@ -24,11 +25,14 @@ fun App() {
     val viewModelHost = remember { ViewModelHost() }
     val appConfigProvider = remember { AppConfigProvider() }
     val productRepository = remember { ProductRepository(appConfigProvider) }
+    val imageResourcesProvider = remember { ImageResourcesProvider() }
+
 
     CompositionLocalProvider(
         LocalViewModelHost provides viewModelHost,
         LocalAppConfig provides appConfigProvider,
-        LocalProductRepository provides productRepository
+        LocalProductRepository provides productRepository,
+        LocalImageResource provides imageResourcesProvider
     ) {
         MaterialTheme {
             PreComposeApp {
@@ -65,7 +69,9 @@ fun App() {
                         val dataJson = it.pathMap["category"] ?: "{}"
                         println("dataaaaa 2 -> $dataJson")
                         val data = dataJson.toData<CategoryItem>()
-                        ProductList(data.name, data.id)
+                        ProductList(data.name, data.id) {
+                            navigator.popBackStack()
+                        }
                     }
                 }
             }
