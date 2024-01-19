@@ -19,7 +19,7 @@ import id.alpha.features.home.state.HomeIntent
 
 @Composable
 fun Home(
-    onClickItem: (ProductItem) -> Unit,
+    onItemClick: (ProductItem) -> Unit,
     onCategoryClick: (CategoryItem) -> Unit
 ) {
     val productRepository = LocalProductRepository.current
@@ -44,7 +44,7 @@ fun Home(
             ProductByRatingSection(
                 homeState = homeState,
                 onItemClick = {
-
+                    onItemClick.invoke(it)
                 },
                 tryAgainAction = {
                     homeViewModel.sendIntent(HomeIntent.GetProductsByRating)

@@ -29,7 +29,12 @@ import id.alpha.libraries.core.viewmodel.rememberViewModel
 
 
 @Composable
-fun ProductList(categoryName: String, categoryId: Int, actionBack: () -> Unit) {
+fun ProductList(
+    categoryName: String,
+    categoryId: Int,
+    onItemClick: (ProductItem) -> Unit,
+    actionBack: () -> Unit
+) {
 
     val productRepository = LocalProductRepository.current
     val appConfig = LocalAppConfig.current
@@ -60,7 +65,7 @@ fun ProductList(categoryName: String, categoryId: Int, actionBack: () -> Unit) {
                     ProductItemVerticalScreen(
                         productItem = item,
                         onItemClick = {
-
+                            onItemClick.invoke(it)
                         }
                     )
                 }

@@ -5,6 +5,8 @@ import id.alpha.apis.product.model.Mapper
 import id.alpha.apis.product.model.ProductList
 import id.alpha.apis.product.model.category.CategoryItem
 import id.alpha.apis.product.model.category.CategoryResponse
+import id.alpha.apis.product.model.productdetail.ProductDetail
+import id.alpha.apis.product.model.productdetail.ProductDetailResponse
 import id.alpha.apis.product.model.productlist.ProductItem
 import id.alpha.apis.product.model.productlist.ProductListResponse
 import id.alpha.libraries.core.AppConfig
@@ -44,6 +46,21 @@ class ProductRepository(private val appConfig: AppConfig) : Repository() {
                 Async.Failure(throwable)
             } else {
                 val data = Mapper.mapResponseToProductList(response)
+                Async.Success(data)
+            }
+        }
+    }
+
+    fun getProductDetail(productId: Int): Flow<Async<ProductDetail>> {
+        return suspend {
+            dataSources.getProductDetail(productId)
+        }.reduce<ProductDetailResponse, ProductDetail>  { response ->
+            val responseData = response.data
+            if (responseData == null) {
+                val throwable = Throwable("Product not found!")
+                Async.Failure(throwable)
+            } else {
+                val data = Mapper.mapResponseToDetail(responseData)
                 Async.Success(data)
             }
         }

@@ -10,13 +10,19 @@ class ProductDataSources(
 
     suspend fun getCategoryList(): HttpResponse {
         val endPoint = "product/category"
-        delay(2000)
+        delay(1000)
         return getHttpResponse(endPoint)
     }
 
     suspend fun getProductList(query: String): HttpResponse {
         val endPoint = "product$query"
-        delay(2000)
+        delay(1000)
+        return getHttpResponse(endPoint)
+    }
+
+    suspend fun getProductDetail(productId: Int): HttpResponse {
+        val endPoint = "product/$productId"
+        delay(1000)
         return getHttpResponse(endPoint)
     }
 }

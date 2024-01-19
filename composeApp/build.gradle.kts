@@ -44,6 +44,7 @@ kotlin {
             implementation(projects.features.home)
             implementation(projects.libraries.core)
             implementation(projects.features.productdetail)
+            implementation(projects.features.favorite)
 
             implementation(libs.preCompose)
         }

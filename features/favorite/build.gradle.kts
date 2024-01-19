@@ -19,7 +19,7 @@ kotlin {
         iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "productdetail"
+            baseName = "favorite"
             isStatic = true
         }
     }
@@ -30,19 +30,13 @@ kotlin {
             implementation(compose.foundation)
             implementation(compose.material)
             implementation(compose.ui)
-            @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
-            implementation(compose.components.resources)
 
             implementation(projects.libraries.core)
             implementation(projects.libraries.component)
+
             implementation(projects.apis.product)
             //put your multiplatform dependencies here
         }
-        androidMain.dependencies {
-            implementation(libs.compose.ui.tooling.preview)
-            implementation(libs.androidx.activity.compose)
-        }
-
         commonTest.dependencies {
             implementation(libs.kotlin.test)
         }
@@ -50,7 +44,7 @@ kotlin {
 }
 
 android {
-    namespace = "id.alpha.features.productdetail"
+    namespace = "id.alpha.features.favorite"
     compileSdk = 34
     defaultConfig {
         minSdk = 24

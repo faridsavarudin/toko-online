@@ -2,6 +2,8 @@ package id.alpha.apis.product.model
 
 import id.alpha.apis.product.model.category.CategoryItem
 import id.alpha.apis.product.model.category.CategoryResponse
+import id.alpha.apis.product.model.productdetail.ProductDetail
+import id.alpha.apis.product.model.productdetail.ProductDetailResponse
 import id.alpha.apis.product.model.productlist.ProductItem
 import id.alpha.apis.product.model.productlist.ProductListResponse
 
@@ -42,6 +44,16 @@ object Mapper {
             id = itemResponse?.id ?: 0,
             name = itemResponse?.name.orEmpty(),
             description = itemResponse?.description.orEmpty(),
+        )
+    }
+
+    fun mapResponseToDetail(productDetailResponse: ProductDetailResponse.DataResponse): ProductDetail {
+        return ProductDetail(
+            id = productDetailResponse.id ?: 0,
+            name = productDetailResponse.name.orEmpty(),
+            description = productDetailResponse.description.orEmpty(),
+            price = productDetailResponse.price ?: 0.0,
+            image = productDetailResponse.images?.get(0).orEmpty()
         )
     }
 }

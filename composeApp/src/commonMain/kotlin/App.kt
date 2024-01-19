@@ -26,13 +26,16 @@ fun App() {
     val appConfigProvider = remember { AppConfigProvider() }
     val productRepository = remember { ProductRepository(appConfigProvider) }
     val imageResourcesProvider = remember { ImageResourcesProvider() }
+    val tabNavigator = remember { TabNavigator() }
+
 
 
     CompositionLocalProvider(
         LocalViewModelHost provides viewModelHost,
         LocalAppConfig provides appConfigProvider,
         LocalProductRepository provides productRepository,
-        LocalImageResource provides imageResourcesProvider
+        LocalImageResource provides imageResourcesProvider,
+        LocalTabNavigator provides tabNavigator
     ) {
         MaterialTheme {
             PreComposeApp {
@@ -45,22 +48,18 @@ fun App() {
                     scene(
                         route = "/home"
                     ) {
-                        Home(
-                            onClickItem = {
-                                navigator.navigate("/detail/${it.name}")
-                            },
-                            onCategoryClick = {
-                                val json = it.toJson()
-                                println("dataaa $json")
-                                navigator.navigate("/list/$json")
-                            }
-                        )
+                        PagerScreen(navigator)
                     }
                     scene(
                         route = "/detail/{name}"
                     ) {
                         val productId = it.pathMap["id"].orEmpty().toIntOrNull() ?: 0
-                        ProductDetail(productId)
+                        ProductDetail(
+                            id = productId,
+                            actionBack = {
+                                navigator.popBackStack()
+                            }
+                        )
                     }
 
                     scene(
@@ -69,9 +68,16 @@ fun App() {
                         val dataJson = it.pathMap["category"] ?: "{}"
                         println("dataaaaa 2 -> $dataJson")
                         val data = dataJson.toData<CategoryItem>()
-                        ProductList(data.name, data.id) {
-                            navigator.popBackStack()
-                        }
+                        ProductList(
+                            data.name,
+                            data.id,
+                            {
+                                navigator.navigate("/detail/${it.id}")
+                            },
+                            {
+                                navigator.popBackStack()
+                            }
+                        )
                     }
                 }
             }
