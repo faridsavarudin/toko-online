@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -15,6 +17,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -24,6 +27,7 @@ import id.alpha.apis.product.model.productdetail.ProductDetail
 import id.alpha.libraries.component.AppTopBar
 import id.alpha.libraries.component.FailureScreen
 import id.alpha.libraries.component.LoadingScreen
+import id.alpha.libraries.component.LocalImageResource
 import id.alpha.libraries.component.utils.toRupiah
 import id.alpha.libraries.core.state.Async
 import id.alpha.libraries.core.viewmodel.rememberViewModel
@@ -36,6 +40,14 @@ fun ProductDetail (
     val repository = LocalProductRepository.current
     val viewModel = rememberViewModel { ProductDetailViewModel(repository) }
     val state by viewModel.uiState.collectAsState()
+
+    val imageResources = LocalImageResource.current
+
+    val imageFavoriteResource = if (state.isFavorite) {
+        imageResources.StarFill()
+    } else {
+        imageResources.StarBorder()
+    }
 
     LaunchedEffect(Unit) {
         viewModel.sendIntent(ProductDetailIntent.GetProductDetail(id))
@@ -64,7 +76,9 @@ fun ProductDetail (
                 }
                 is Async.Success -> {
                     val data = async.data
-                    renderSuccessDetail(data)
+                    renderSuccessDetail(data, imageFavoriteResource) {
+                        viewModel.sendIntent(ProductDetailIntent.ToggleFavorite(data))
+                    }
 
                 }
                 else -> {}
@@ -76,7 +90,9 @@ fun ProductDetail (
     )
 }
 
-fun LazyListScope.renderSuccessDetail(data: ProductDetail) {
+fun LazyListScope.renderSuccessDetail(
+    data: ProductDetail,
+    imageFavorite: Painter, toggleFavorite: () -> Unit) {
     item {
         Image(
             painter = rememberImagePainter(data.image),
@@ -99,6 +115,16 @@ fun LazyListScope.renderSuccessDetail(data: ProductDetail) {
             )
 
             // icon favorite
+            IconButton(
+                onClick = {
+                    toggleFavorite.invoke()
+                }
+            ) {
+                Icon(
+                    painter = imageFavorite,
+                    contentDescription = null
+                )
+            }
         }
     }
 

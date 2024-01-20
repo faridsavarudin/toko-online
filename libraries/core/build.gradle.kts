@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.jetbrainsCompose)
+    alias(libs.plugins.realm)
 }
 
 kotlin {
@@ -32,6 +33,8 @@ kotlin {
             api(libs.ktor.client.contentNegotiation)
             api(libs.ktor.client.serialization)
             api(libs.ktor.client.logging)
+            api(libs.realm)
+            api(libs.realmKotlinSync)
             //put your multiplatform dependencies here
         }
         androidMain.dependencies {

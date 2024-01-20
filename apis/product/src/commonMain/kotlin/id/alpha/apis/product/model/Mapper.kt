@@ -2,6 +2,7 @@ package id.alpha.apis.product.model
 
 import id.alpha.apis.product.model.category.CategoryItem
 import id.alpha.apis.product.model.category.CategoryResponse
+import id.alpha.apis.product.model.local.ProductRealm
 import id.alpha.apis.product.model.productdetail.ProductDetail
 import id.alpha.apis.product.model.productdetail.ProductDetailResponse
 import id.alpha.apis.product.model.productlist.ProductItem
@@ -54,6 +55,29 @@ object Mapper {
             description = productDetailResponse.description.orEmpty(),
             price = productDetailResponse.price ?: 0.0,
             image = productDetailResponse.images?.get(0).orEmpty()
+        )
+    }
+
+    fun realmMapFromDetail(detail: ProductDetail): ProductRealm {
+        return ProductRealm()
+            .apply {
+                id = detail.id
+                name = detail.name
+                price = detail.price
+                description = detail.description
+                image = detail.image
+            }
+    }
+
+    fun realmMapToItem(realm: ProductRealm): ProductItem {
+        return ProductItem(
+            id = realm.id,
+            name = realm.name,
+            price = realm.price,
+            image = realm.image,
+            discount = 0,
+            rating = 0.0,
+            category = CategoryItem(0, "", "")
         )
     }
 }

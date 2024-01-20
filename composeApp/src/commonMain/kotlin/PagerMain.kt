@@ -102,7 +102,11 @@ fun PagerScreen(navigator: Navigator) {
                     )
                 }
                 1 -> {
-                    Favorite()
+                    Favorite(
+                     onItemClick = {
+                         navigator.navigate("/detail/${it.id}")
+                     }
+                    )
                 }
             }
         }

@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.Flow
 
 class ProductRepository(private val appConfig: AppConfig) : Repository() {
     private val dataSources by lazy { ProductDataSources(appConfig) }
+    private val favoriteDataSources by lazy { ProductFavoriteDataSources() }
 
     fun getAppName() = appConfig.appName
 
@@ -64,6 +65,22 @@ class ProductRepository(private val appConfig: AppConfig) : Repository() {
                 Async.Success(data)
             }
         }
+    }
+
+    suspend fun getProductFavorite(): Flow<List<ProductItem>> {
+        return favoriteDataSources.getAllFavorite()
+    }
+
+    suspend fun isProductFavorite(productId: Int): Flow<Boolean> {
+        return favoriteDataSources.getProductIsFavorite(productId)
+    }
+
+    suspend fun insertFavorite(productDetail: ProductDetail) {
+        favoriteDataSources.insertProduct(productDetail)
+    }
+
+    suspend fun deleteFavorite(productId: Int) {
+        favoriteDataSources.removeProduct(productId)
     }
 }
 

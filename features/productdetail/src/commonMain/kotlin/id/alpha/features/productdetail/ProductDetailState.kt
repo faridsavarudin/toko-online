@@ -4,5 +4,6 @@ import id.alpha.apis.product.model.productdetail.ProductDetail
 import id.alpha.libraries.core.state.Async
 
 data class ProductDetailState (
-    val asyncProductDetail: Async<ProductDetail> = Async.Default
+    val asyncProductDetail: Async<ProductDetail> = Async.Default,
+    val isFavorite: Boolean = false
 )

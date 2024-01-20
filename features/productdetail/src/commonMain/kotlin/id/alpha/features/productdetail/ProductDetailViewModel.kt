@@ -1,6 +1,7 @@
 package id.alpha.features.productdetail
 
 import id.alpha.apis.product.ProductRepository
+import id.alpha.apis.product.model.productdetail.ProductDetail
 import id.alpha.libraries.core.state.Intent
 import id.alpha.libraries.core.viewmodel.ViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -16,10 +17,11 @@ class ProductDetailViewModel(
             is ProductDetailIntent.GetProductDetail -> {
                 val id = intent.id
                 getProductDetail(id)
+                getProductIsFavorite(id)
             }
             is ProductDetailIntent.ToggleFavorite -> {
-                val id = intent.id
-                toggleFavorite(id)
+                val detail = intent.productDetail
+                toggleFavorite(detail)
             }
         }
     }
@@ -36,8 +38,24 @@ class ProductDetailViewModel(
             }
     }
 
-    private fun toggleFavorite(id: Int) = viewModelScope.launch {
+    private fun getProductIsFavorite(id: Int) = viewModelScope.launch {
+        repository.isProductFavorite(id)
+            .stateIn(this)
+            .collectLatest {
+                updateUiState {
+                    copy(
+                        isFavorite = it
+                    )
+                }
+            }
+    }
 
+    private fun toggleFavorite(productDetail: ProductDetail) = viewModelScope.launch {
+        if (uiState.value.isFavorite) {
+            repository.deleteFavorite(productDetail.id)
+        } else {
+            repository.insertFavorite(productDetail)
+        }
     }
 
 }
