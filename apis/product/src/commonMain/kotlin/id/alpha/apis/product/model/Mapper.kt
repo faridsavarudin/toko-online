@@ -1,5 +1,7 @@
 package id.alpha.apis.product.model
 
+import id.alpha.apis.product.model.cart.CartProductItem
+import id.alpha.apis.product.model.cart.CartResponse
 import id.alpha.apis.product.model.category.CategoryItem
 import id.alpha.apis.product.model.category.CategoryResponse
 import id.alpha.apis.product.model.local.ProductRealm
@@ -79,5 +81,17 @@ object Mapper {
             rating = 0.0,
             category = CategoryItem(0, "", "")
         )
+    }
+
+    fun mapResponseToCartProductItem(response: List<CartResponse.DataResponse>?) : List<CartProductItem> {
+        return response?.map {
+            CartProductItem(
+                productId = it.productId ?: 0,
+                price = it.price ?: 0.0,
+                discount = it.discount ?: 0,
+                amount = it.amount ?: 0.0,
+                quantity = it.quantity ?: 0
+            )
+        }.orEmpty()
     }
 }

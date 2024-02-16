@@ -1,9 +1,11 @@
 package id.alpha.libraries.core.repository
 
+import id.alpha.libraries.core.network.UnauthorizedException
 import id.alpha.libraries.core.state.Async
 import io.ktor.client.call.body
 import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsText
+import io.ktor.http.HttpStatusCode
 import io.ktor.http.isSuccess
 import io.ktor.utils.io.errors.IOException
 import kotlinx.coroutines.flow.Flow
@@ -18,13 +20,21 @@ abstract class Repository {
     ) : Flow<Async<U>> {
         return flow {
             val httpResponse = invoke()
-            if (httpResponse.status.isSuccess()) {
-                val data = httpResponse.body<T>()
-                emit(block.invoke(data))
-            } else {
-                val throwable = Throwable(httpResponse.bodyAsText())
-                val asyncFailure = Async.Failure(throwable)
-                emit(asyncFailure)
+            when {
+                httpResponse.status.isSuccess() -> {
+                    val data = httpResponse.body<T>()
+                    emit(block.invoke(data))
+                }
+                httpResponse.status == HttpStatusCode.Unauthorized -> {
+                    val throwable = UnauthorizedException()
+                    val asyncFailure = Async.Failure(throwable)
+                    emit(asyncFailure)
+                }
+                else -> {
+                    val throwable = Throwable(httpResponse.bodyAsText())
+                    val asyncFailure = Async.Failure(throwable)
+                    emit(asyncFailure)
+                }
             }
         }.onStart {
             emit(Async.Loading)

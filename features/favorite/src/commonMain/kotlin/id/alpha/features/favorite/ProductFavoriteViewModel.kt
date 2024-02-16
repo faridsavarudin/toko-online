@@ -19,16 +19,16 @@ class ProductFavoriteViewModel(
         }
     }
 
-    private fun getProductFavorite() = viewModelScope.launch {
-        productRepository
-            .getProductFavorite()
-            .stateIn(this)
-            .collectLatest {
-                updateUiState {
-                    copy(
-                        productList = it
-                    )
-                }
-            }
-    }
+//    private fun getProductFavorite() = viewModelScope.launch {
+//        productRepository
+//            .getProductFavorite()
+//            .stateIn(this)
+//            .collectLatest {
+//                updateUiState {
+//                    copy(
+//                        productList = it
+//                    )
+//                }
+//            }
+//    }
 }

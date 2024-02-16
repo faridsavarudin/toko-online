@@ -41,10 +41,13 @@ kotlin {
             implementation(projects.libraries.component)
             implementation(projects.features.productlist)
             implementation(projects.apis.product)
+            implementation(projects.apis.authentication)
             implementation(projects.features.home)
             implementation(projects.libraries.core)
             implementation(projects.features.productdetail)
             implementation(projects.features.favorite)
+            implementation(projects.features.login)
+            implementation(projects.features.cart)
 
             implementation(libs.preCompose)
         }

@@ -42,7 +42,7 @@ abstract class LocalDataSources(
                 .find()
                 .asFlow()
                 .map {
-                    it.list
+                    it.list.asReversed()
                 }
         }
     }

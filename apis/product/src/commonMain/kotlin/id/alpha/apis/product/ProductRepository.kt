@@ -3,6 +3,8 @@ package id.alpha.apis.product
 import androidx.compose.runtime.compositionLocalOf
 import id.alpha.apis.product.model.Mapper
 import id.alpha.apis.product.model.ProductList
+import id.alpha.apis.product.model.cart.CartProductItem
+import id.alpha.apis.product.model.cart.CartResponse
 import id.alpha.apis.product.model.category.CategoryItem
 import id.alpha.apis.product.model.category.CategoryResponse
 import id.alpha.apis.product.model.productdetail.ProductDetail
@@ -10,13 +12,23 @@ import id.alpha.apis.product.model.productdetail.ProductDetailResponse
 import id.alpha.apis.product.model.productlist.ProductItem
 import id.alpha.apis.product.model.productlist.ProductListResponse
 import id.alpha.libraries.core.AppConfig
+import id.alpha.libraries.core.network.LocalTokenDataSources
 import id.alpha.libraries.core.repository.Repository
 import id.alpha.libraries.core.state.Async
 import kotlinx.coroutines.flow.Flow
 
-class ProductRepository(private val appConfig: AppConfig) : Repository() {
+class ProductRepository(
+    private val appConfig: AppConfig,
+    private val localTokenDataSources: LocalTokenDataSources
+) : Repository() {
     private val dataSources by lazy { ProductDataSources(appConfig) }
     private val favoriteDataSources by lazy { ProductFavoriteDataSources() }
+    private val cartDataSources by lazy {
+        CartDataSources(
+            appConfig = appConfig,
+            localTokenDataSources = localTokenDataSources
+        )
+    }
 
     fun getAppName() = appConfig.appName
 
@@ -81,6 +93,19 @@ class ProductRepository(private val appConfig: AppConfig) : Repository() {
 
     suspend fun deleteFavorite(productId: Int) {
         favoriteDataSources.removeProduct(productId)
+    }
+
+    fun getCart(): Flow<Async<List<CartProductItem>>> {
+        return suspend {
+            cartDataSources.getCart()
+        }.reduce<CartResponse, List<CartProductItem>> { response ->
+            val responseData = response.data.orEmpty()
+            if (responseData.isEmpty()) {
+                Async.Failure(Throwable("Cart is empty"))
+            } else {
+                Async.Success(Mapper.mapResponseToCartProductItem(response.data?.filterNotNull()))
+            }
+        }
     }
 }
 

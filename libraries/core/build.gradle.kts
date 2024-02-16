@@ -35,6 +35,7 @@ kotlin {
             api(libs.ktor.client.logging)
             api(libs.realm)
             api(libs.realmKotlinSync)
+            api(libs.multiplatformSettings)
             //put your multiplatform dependencies here
         }
         androidMain.dependencies {

@@ -25,6 +25,7 @@ imageLoader = "1.7.1"
 paging-androidx = "3.3.0-alpha02"
 paging-cashapp = "3.3.0-alpha02-0.4.0"
 realm = "1.11.0"
+multiplatformSettings = "1.1.1"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -60,6 +61,7 @@ paging-cashapp-common = { module = "app.cash.paging:paging-common", version.ref 
 paging-cashapp-compose = { module = "app.cash.paging:paging-compose-common", version.ref = "paging-cashapp" }
 realm = { module = "io.realm.kotlin:library-base", version.ref = "realm" }
 realmKotlinSync = { module = "io.realm.kotlin:library-sync", version.ref = "realm" }
+multiplatformSettings = { module = "com.russhwolf:multiplatform-settings-no-arg", version.ref = "multiplatformSettings" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
