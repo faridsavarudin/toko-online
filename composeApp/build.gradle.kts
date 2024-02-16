@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.buildKonfig)
+    alias(libs.plugins.kotlinSerialization)
 }
 
 kotlin {
@@ -37,10 +38,18 @@ kotlin {
             implementation(compose.ui)
             @OptIn(ExperimentalComposeLibrary::class)
             implementation(compose.components.resources)
-
+            implementation(projects.libraries.component)
+            implementation(projects.features.productlist)
             implementation(projects.apis.product)
+            implementation(projects.apis.authentication)
             implementation(projects.features.home)
             implementation(projects.libraries.core)
+            implementation(projects.features.productdetail)
+            implementation(projects.features.favorite)
+            implementation(projects.features.login)
+            implementation(projects.features.cart)
+
+            implementation(libs.preCompose)
         }
 
         androidMain.dependencies {
@@ -94,6 +103,7 @@ buildkonfig {
     // default config is required
     defaultConfigs {
         buildConfigField(STRING, "BASE_URL", "https://marketfake.fly.dev/")
+        buildConfigField(STRING, "APP_NAME", "Toko Online")
     }
 }
 

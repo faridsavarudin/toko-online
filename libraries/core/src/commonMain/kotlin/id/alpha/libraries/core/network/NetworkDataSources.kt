@@ -7,6 +7,8 @@ import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.plugins.logging.SIMPLE
 import io.ktor.client.request.get
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
@@ -14,12 +16,29 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
 abstract class NetworkDataSources(
-    private val baseUrl: String
+    private val baseUrl: String,
+    private val tokenDataSources: TokenDataSources = TokenDataSources.Default
 ) {
 
     suspend fun getHttpResponse(endPoint: String): HttpResponse {
         val url = "$baseUrl$endPoint"
         return client.get(url) {
+            headers.append(
+                name = "Authorization",
+                value = "Bearer ${tokenDataSources.getToken}"
+            )
+            contentType(ContentType.Application.Json)
+        }
+    }
+
+    suspend fun postHttpResponse(endPoint: String, body: Any): HttpResponse {
+        val url = "$baseUrl$endPoint"
+        return client.post(url) {
+            headers.append(
+                name = "Authorization",
+                value = "Bearer ${tokenDataSources.getToken}"
+            )
+            setBody(body)
             contentType(ContentType.Application.Json)
         }
     }

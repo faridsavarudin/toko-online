@@ -4,6 +4,7 @@ import androidx.compose.runtime.compositionLocalOf
 
 interface AppConfig {
 
+    val appName: String
     val baseUrl: String
 }
 

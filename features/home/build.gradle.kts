@@ -33,8 +33,8 @@ kotlin {
             @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
             implementation(compose.components.resources)
 
-
             implementation(projects.libraries.core)
+            implementation(projects.libraries.component)
             implementation(projects.apis.product)
             //put your multiplatform dependencies here
         }
